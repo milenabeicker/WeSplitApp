@@ -15,7 +15,7 @@ struct ContentView: View {
     @State private var tipPercentage = 10
     @FocusState private var amountIsFocused: Bool
     
-    let tipercentages = [10, 15, 20, 25, 0]
+    let localCurrency = Locale.current.currency?.identifier ??  "USD"
     
     var totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
@@ -40,7 +40,7 @@ struct ContentView: View {
         NavigationStack {
             Form {
                 Section ("Valor da conta ") {
-                    TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ??  "USD"))
+                    TextField("Amount", value: $checkAmount, format: .currency(code: localCurrency))
                         .keyboardType(.decimalPad)
                         .focused($amountIsFocused)
                 }
@@ -50,7 +50,7 @@ struct ContentView: View {
                             Text("\($0) pessoas")
                         }
                     }
-                }//
+                }
                 
                 Section ("Gorjeta"){
                     Picker("Quanto de gorjeta você quer deixar?", selection: $tipPercentage) {
@@ -62,11 +62,11 @@ struct ContentView: View {
                 }
                 
                 Section ("Valor total com gorjeta ") {
-                    Text(valorComGorjeta, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    Text(valorComGorjeta, format: .currency(code: localCurrency))
                 }
                 
-                Section ("Valor final por pessoas ") {
-                    Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                Section ("Valor final por pessoa ") {
+                    Text(totalPerPerson, format: .currency(code: localCurrency))
                 }
             }
             .navigationTitle("WeSplit")
