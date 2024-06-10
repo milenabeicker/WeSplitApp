@@ -12,7 +12,7 @@ struct ContentView: View {
     
     @State private var checkAmount = 0.0
     @State private var numberOfPeople = 2
-    @State private var tipPercentage = 20
+    @State private var tipPercentage = 10
     @FocusState private var amountIsFocused: Bool
     
     let tipercentages = [10, 15, 20, 25, 0]
@@ -31,30 +31,29 @@ struct ContentView: View {
         let tipSelection1 = Double(tipPercentage)
         
         let somaTotalComGorjeta = checkAmount / 100 * tipSelection1
-        let valorTotalComGorjeta = checkAmount + somaTotalComGorjeta
-        return valorTotalComGorjeta
+        return checkAmount + somaTotalComGorjeta
+        
     }
     
     
     var body: some View {
         NavigationStack {
             Form {
-                Section {
+                Section ("Valor da conta ") {
                     TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ??  "USD"))
                         .keyboardType(.decimalPad)
                         .focused($amountIsFocused)
-                    
+                }
+                Section("Divisão da conta") {
                     Picker("Numero de pessoas", selection: $numberOfPeople) {
                         ForEach(2..<100) {
                             Text("\($0) pessoas")
                         }
                     }
-                }
+                }//
                 
-                Section {
-                   // Text("Quanta gorjeta você quer deixar?")
-                    
-                    Picker("Quanta gorjeta você quer deixar?", selection: $tipPercentage) {
+                Section ("Gorjeta"){
+                    Picker("Quanto de gorjeta você quer deixar?", selection: $tipPercentage) {
                         ForEach(0..<101) {
                             Text($0, format: .percent)
                         }
@@ -62,27 +61,22 @@ struct ContentView: View {
                     .pickerStyle(.menu)
                 }
                 
-                Section {
-                   
-                    HStack {
-                        Text("Valor total com gorjeta: ")
-                        Text(valorComGorjeta, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-               }
+                Section ("Valor total com gorjeta ") {
+                    Text(valorComGorjeta, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                 }
                 
-                Section {
-                        Text("Valor final por pessoas: ")
-                        Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                Section ("Valor final por pessoas ") {
+                    Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                 }
             }
-           .navigationTitle("WeSplit")
-           .toolbar {
-               if amountIsFocused {
-                   Button("Done") {
-                       amountIsFocused = false
-                   }
-               }
-           }
+            .navigationTitle("WeSplit")
+            .toolbar {
+                if amountIsFocused {
+                    Button("Done") {
+                        amountIsFocused = false
+                    }
+                }
+            }
         }
     }
 }
