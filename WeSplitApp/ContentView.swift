@@ -27,6 +27,15 @@ struct ContentView: View {
         return amountPerPerson
     }
     
+    var valorComGorjeta: Double {
+        let tipSelection1 = Double(tipPercentage)
+        
+        let somaTotalComGorjeta = checkAmount / 100 * tipSelection1
+        let valorTotalComGorjeta = checkAmount + somaTotalComGorjeta
+        return valorTotalComGorjeta
+    }
+    
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -43,18 +52,27 @@ struct ContentView: View {
                 }
                 
                 Section {
-                    Text("Quanta gorjeta você quer deixar?")
+                   // Text("Quanta gorjeta você quer deixar?")
                     
-                    Picker("Tipo de porcentagem", selection: $tipPercentage) {
-                        ForEach(tipercentages, id: \.self) {
+                    Picker("Quanta gorjeta você quer deixar?", selection: $tipPercentage) {
+                        ForEach(0..<101) {
                             Text($0, format: .percent)
                         }
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.menu)
                 }
                 
                 Section {
-                    Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                   
+                    HStack {
+                        Text("Valor total com gorjeta: ")
+                        Text(valorComGorjeta, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+               }
+                }
+                
+                Section {
+                        Text("Valor final por pessoas: ")
+                        Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                 }
             }
            .navigationTitle("WeSplit")
